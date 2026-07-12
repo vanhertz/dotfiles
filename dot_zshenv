@@ -1,0 +1,4 @@
+export ZDOTDIR="$HOME/.config/zsh"
+
+[ -f "$HOME/.config/shell/Zenvironment.sh" ] && \
+    . "$HOME/.config/shell/Zenvironment.sh"

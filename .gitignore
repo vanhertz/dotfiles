@@ -1,0 +1,31 @@
+# Archivos temporales
+*.swp
+*.swo
+*~
+*.tmp
+*.bak
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Directorios de caché
+.cache/
+
+# Archivos de prueba
+test/
+tests/
+
+# Variables de entorno
+.env
+.env.*
+
+# Secrets locales (si existen)
+secrets/
+private/

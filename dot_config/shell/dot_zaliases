@@ -12,7 +12,7 @@ alias lf="lfcd"
 alias locate="plocate"
 #alias tp="trash-put"
 #alias tpr="trash-restore"
-alias cat='bat'
+#alias cat='bat'
 alias grep='grep --color=always'
 
 # application aliases

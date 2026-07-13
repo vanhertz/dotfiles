@@ -54,8 +54,48 @@ function select-word-right() {
   zle forward-word
 }
 
+function select-char-left() {
+  if (( ! REGION_ACTIVE )); then
+    MARK=$CURSOR
+    REGION_ACTIVE=1
+  fi
+  zle backward-char
+}
+
+function select-char-right() {
+  if (( ! REGION_ACTIVE )); then
+    MARK=$CURSOR
+    REGION_ACTIVE=1
+  fi
+  zle forward-char
+}
+
+function move-char-left() {
+  REGION_ACTIVE=0
+  zle backward-char
+}
+
+function move-char-right() {
+  REGION_ACTIVE=0
+  zle forward-char
+}
+
+function move-word-left() {
+  REGION_ACTIVE=0
+  zle backward-word
+}
+
+function move-word-right() {
+  REGION_ACTIVE=0
+  zle forward-word
+}
+
 function setup-keybindings() {
   local keymap
+  local left=${terminfo[kcub1]:-$'\e[D'}
+  local right=${terminfo[kcuf1]:-$'\e[C'}
+  local shift_left=${terminfo[kLFT]:-$'\e[1;2D'}
+  local shift_right=${terminfo[kRIT]:-$'\e[1;2C'}
   local ctrl_left=${terminfo[kLFT5]:-$'\e[1;5D'}
   local ctrl_right=${terminfo[kRIT5]:-$'\e[1;5C'}
   local ctrl_shift_left=${terminfo[kLFT6]:-$'\e[1;6D'}
@@ -66,6 +106,12 @@ function setup-keybindings() {
 
   zle -N select-word-left
   zle -N select-word-right
+  zle -N select-char-left
+  zle -N select-char-right
+  zle -N move-char-left
+  zle -N move-char-right
+  zle -N move-word-left
+  zle -N move-word-right
 
   # Resaltar la región seleccionada con los colores Catppuccin del terminal.
   zle_highlight=(${zle_highlight:#region:*} 'region:fg=#1e1e2e,bg=#f5e0dc')
@@ -73,8 +119,16 @@ function setup-keybindings() {
   # Mantener la edición normal incluso si zsh-vi-mode cambia el mapa activo.
   bindkey -e
   for keymap in emacs viins; do
-    bindkey -M $keymap "$ctrl_left" backward-word
-    bindkey -M $keymap "$ctrl_right" forward-word
+    bindkey -M $keymap "$left" move-char-left
+    bindkey -M $keymap "$right" move-char-right
+    bindkey -M $keymap $'\e[D' move-char-left
+    bindkey -M $keymap $'\e[C' move-char-right
+    bindkey -M $keymap $'\eOD' move-char-left
+    bindkey -M $keymap $'\eOC' move-char-right
+    bindkey -M $keymap "$shift_left" select-char-left
+    bindkey -M $keymap "$shift_right" select-char-right
+    bindkey -M $keymap "$ctrl_left" move-word-left
+    bindkey -M $keymap "$ctrl_right" move-word-right
     bindkey -M $keymap "$ctrl_shift_left" select-word-left
     bindkey -M $keymap "$ctrl_shift_right" select-word-right
 

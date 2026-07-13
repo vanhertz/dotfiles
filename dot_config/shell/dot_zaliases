@@ -1,19 +1,20 @@
 #!/bin/sh
 
 # settings for common commands
+alias ll="ls -l -s -S -h --group-directories-first --color=always --classify=auto --indicator-style=classify"
+alias ls="ls --classify=auto -indicator-style=classify --color=always"
+alias lf="lfcd"
+alias locate="plocate"
+alias grep='grep --color=always'
 #alias cp="cp -iv"
 #alias mv="mv -iv"
 #alias rm="rm -vI"
 #alias bc="bc -ql"
 #alias mkd="mkdir -pv"
-alias ll="ls -l -s -S -h --group-directories-first --color=always --classify=auto --indicator-style=classify"
-alias ls="ls --classify=auto -indicator-style=classify --color=always"
-alias lf="lfcd"
-alias locate="plocate"
 #alias tp="trash-put"
 #alias tpr="trash-restore"
 #alias cat='bat'
-alias grep='grep --color=always'
+
 
 # application aliases
 #alias v="$EDITOR"
@@ -26,7 +27,7 @@ alias grep='grep --color=always'
 # aliases to clean up home directory
 #alias monerod=monerod --data-dir "$XDG_DATA_HOME"/bitmonero
 #alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
-alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
+alias wget="wget --hsts-file="$XDG_DATA_HOME/wget-hsts""
 
 # git aliases
 #alias g="git"
@@ -51,10 +52,3 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 #alias gb="git branch"
 #alias gf="git fetch"
 
-# aliases for dotfiles git bare repo
-#alias cf="dotbare"
-#alias cfa="dotbare fadd"
-#alias cfc="dotbare commit"
-#alias cfp="dotbare push"
-#alias cfs="dotbare fstat"
-#alias c="dotbare fedit"

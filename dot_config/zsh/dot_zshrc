@@ -90,6 +90,38 @@ function move-word-right() {
   zle forward-word
 }
 
+function delete-selection-or-char() {
+  if (( REGION_ACTIVE )); then
+    zle kill-region
+    REGION_ACTIVE=0
+  else
+    zle delete-char
+  fi
+}
+
+function copy-selection-to-clipboard() {
+  if (( REGION_ACTIVE )); then
+    local start=$MARK
+    local end=$CURSOR
+    local swap selected
+
+    if (( start > end )); then
+      swap=$start
+      start=$end
+      end=$swap
+    fi
+
+    selected=${BUFFER[$(( start + 1 )),$end]}
+
+    if (( $+commands[wl-copy] )); then
+      print -rn -- "$selected" | wl-copy >/dev/null 2>&1
+      zle -M 'Texto copiado'
+    else
+      zle -M 'Falta instalar wl-copy'
+    fi
+  fi
+}
+
 function setup-keybindings() {
   local keymap
   local left=${terminfo[kcub1]:-$'\e[D'}
@@ -103,6 +135,7 @@ function setup-keybindings() {
   local insert=${terminfo[kich1]:-$'\e[2~'}
   local delete=${terminfo[kdch1]:-$'\e[3~'}
   local ctrl_delete=${terminfo[kDC5]:-$'\e[3;5~'}
+  local copy_selection=$'\x18c'
 
   zle -N select-word-left
   zle -N select-word-right
@@ -112,6 +145,8 @@ function setup-keybindings() {
   zle -N move-char-right
   zle -N move-word-left
   zle -N move-word-right
+  zle -N delete-selection-or-char
+  zle -N copy-selection-to-clipboard
 
   # Resaltar la región seleccionada con los colores Catppuccin del terminal.
   zle_highlight=(${zle_highlight:#region:*} 'region:fg=#1e1e2e,bg=#f5e0dc')
@@ -134,8 +169,10 @@ function setup-keybindings() {
 
     bindkey -M $keymap '^H' backward-kill-word
     bindkey -M $keymap "$ctrl_delete" kill-word
-    bindkey -M $keymap "$delete" delete-char
+    bindkey -M $keymap "$delete" delete-selection-or-char
     bindkey -M $keymap "$insert" overwrite-mode
+    bindkey -M $keymap "$copy_selection" copy-selection-to-clipboard
+    bindkey -M $keymap '^C' send-break
 
     bindkey -M $keymap '^[[H' beginning-of-line
     bindkey -M $keymap '^[[F' end-of-line
@@ -146,6 +183,12 @@ function setup-keybindings() {
     bindkey -M $keymap -s '^[[6~' ''
   done
 }
+
+# Integrar los widgets personalizados con zsh-autosuggestions.
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS+=(move-char-right)
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS+=(move-word-right)
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(delete-selection-or-char)
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(copy-selection-to-clipboard)
 
 # zsh-vi-mode invoca este hook al terminar su inicialización.
 function zvm_after_init() {

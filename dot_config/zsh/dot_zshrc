@@ -67,6 +67,9 @@ function setup-keybindings() {
   zle -N select-word-left
   zle -N select-word-right
 
+  # Resaltar la región seleccionada con los colores Catppuccin del terminal.
+  zle_highlight=(${zle_highlight:#region:*} 'region:fg=#1e1e2e,bg=#f5e0dc')
+
   # Mantener la edición normal incluso si zsh-vi-mode cambia el mapa activo.
   bindkey -e
   for keymap in emacs viins; do

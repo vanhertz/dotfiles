@@ -28,4 +28,4 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply TUUSUARIO
 
 ## Licencia
 
-MIT
+GLP-3.0

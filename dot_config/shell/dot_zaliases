@@ -2,10 +2,10 @@
 
 # settings for common commands
 alias ll="ls -l -s -S -h --group-directories-first --color=always --classify=auto --indicator-style=classify"
-alias ls="ls --classify=auto -indicator-style=classify --color=always"
+alias ls="ls --classify=auto --indicator-style=classify --color=always"
 alias lf="lfcd"
 alias locate="plocate"
-alias grep='grep --color=always'
+
 #alias cp="cp -iv"
 #alias mv="mv -iv"
 #alias rm="rm -vI"

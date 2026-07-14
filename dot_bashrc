@@ -8,8 +8,8 @@ esac
 
 # Historial
 HISTCONTROL=ignoreboth:erasedups
-HISTSIZE=10000
-HISTFILESIZE=20000
+HISTSIZE=100
+HISTFILESIZE=2000
 shopt -s histappend
 
 # Colores para comandos habituales, si están disponibles.

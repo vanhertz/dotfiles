@@ -19,8 +19,8 @@ _comp_options+=(globdots)
 compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
 
 # history
-export HISTSIZE=100000
-export SAVEHIST=20000
+export HISTSIZE=200         # number of commands to remember in the command history
+export SAVEHIST=20000       # number of commands to save in the history file
 export HISTFILE="$HOME/.cache/zsh/history"
 setopt hist_ignore_dups     # do not record an event that was just recorded again
 setopt hist_ignore_all_dups # delete an old recorded event if a new event is a duplicate

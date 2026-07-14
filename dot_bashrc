@@ -1,10 +1,59 @@
-#
 # ~/.bashrc
-#
 
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
+# No producir salida ni modificar el entorno de shells no interactivas.
+case $- in
+  *i*) ;;
+  *) return ;;
+esac
 
-alias ls='ls --color=auto'
-alias grep='grep --color=auto'
-PS1='[\u@\h \W]\$ '
+# Historial
+HISTCONTROL=ignoreboth:erasedups
+HISTSIZE=10000
+HISTFILESIZE=20000
+shopt -s histappend
+
+# Colores para comandos habituales, si están disponibles.
+if [[ -t 1 && ${TERM:-dumb} != dumb ]]; then
+  if command -v dircolors >/dev/null 2>&1; then
+    eval "$(dircolors -b)"
+  fi
+
+  alias ls='ls --color=auto'
+  alias grep='grep --color=auto'
+  alias egrep='grep -E --color=auto'
+  alias fgrep='grep -F --color=auto'
+fi
+
+alias ll='ls -alFh'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Prompt portable con información adicional durante conexiones SSH.
+__bash_prompt() {
+  local exit_code=$?
+  local reset='\[\e[0m\]'
+  local red='\[\e[31m\]'
+  local green='\[\e[32m\]'
+  local yellow='\[\e[33m\]'
+  local blue='\[\e[34m\]'
+  local cyan='\[\e[36m\]'
+  local user_color=$green
+  local remote=''
+  local status=''
+
+  # Guardar cada comando sin esperar al cierre de la sesión.
+  history -a
+
+  (( EUID == 0 )) && user_color=$red
+  [[ -n ${SSH_CONNECTION:-} ]] && remote="${yellow}[ssh]${reset} "
+  (( exit_code != 0 )) && status=" ${red}[${exit_code}]${reset}"
+
+  PS1="${remote}${user_color}\u${reset}@${cyan}\h${reset} ${blue}\w${reset}${status}\n\\$ "
+}
+
+if [[ -t 1 && ${TERM:-dumb} != dumb ]]; then
+  PROMPT_COMMAND=__bash_prompt
+else
+  PS1='\u@\h:\w\$ '
+fi
+

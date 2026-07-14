@@ -1,5 +1,7 @@
-#
 # ~/.bash_profile
-#
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
+# Bash no carga ~/.bashrc automáticamente en shells de login (por ejemplo,
+# algunas sesiones SSH), así que se carga explícitamente cuando existe.
+if [[ -r "$HOME/.bashrc" ]]; then
+  . "$HOME/.bashrc"
+fi

@@ -115,7 +115,6 @@ function copy-selection-to-clipboard() {
 
     if (( $+commands[wl-copy] )); then
       print -rn -- "$selected" | wl-copy >/dev/null 2>&1
-      zle -M 'Texto copiado'
     else
       zle -M 'Falta instalar wl-copy'
     fi
